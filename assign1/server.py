@@ -1,25 +1,26 @@
 import zmq
-import random
-import sys
-import time
-import numpy as np
 from utils import *
 
 
-port = "5555"
+def server(port, video_name):
+    """
+    Re-samples given video to images, sends them to port
+    :param port: port to send on
+    :param video_name: Name of video (with extension)
+    :return: nothing
+    """
+    context = zmq.Context()
+    socket = context.socket(zmq.PUSH)
+    socket.bind("tcp://127.0.0.1:%s" % port)
 
-context = zmq.Context()
-socket = context.socket(zmq.PUSH)
-socket.bind("tcp://127.0.0.1:%s" % port)
+    if not os.path.exists('images'):
+        os.makedirs('images')
+        resample_video_frames(30, 5, video_name, 'images')
 
-if os.path.exists('images') == False:
-    os.makedirs('images')
-    resample_video_frames(30, 5, 'checkerboard.mp4', 'images')
+    images, names = read_images(r'images')
 
-images, names = read_images(r'images')
-
-for img, name in zip(images, names):
-    msg = {'data': img, 'name': name}
-    # socket.send_pyobj(msg)
-    # msg = socket.recv()
-    # print(msg)
+    for img, name in zip(images, names):
+        msg = {'data': img, 'name': name}
+        # socket.send_pyobj(msg)
+        # msg = socket.recv()
+        # print(msg)
