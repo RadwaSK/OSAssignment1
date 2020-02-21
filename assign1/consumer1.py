@@ -20,7 +20,7 @@ def consumer1(port1, port2):
         msg = consumer1_rec.recv_pyobj()
         # print(msg)
         img = msg['data']
-        ret, img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+        ret, img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
         msg['data'] = img
         consumer1_sender.send_pyobj(msg)
         # time.sleep(1)
