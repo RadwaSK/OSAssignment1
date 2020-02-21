@@ -25,6 +25,8 @@ def resample_video_frames(in_fps, out_fps, in_path, out_path):
 
     # inputs and outputs parameters
     in_sample_rate = int(in_fps)
+    if out_fps == 0:
+        out_fps = 3
     out_sample_rate = int(out_fps)
 
     # some calculations
