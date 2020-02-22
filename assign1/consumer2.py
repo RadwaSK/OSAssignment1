@@ -16,7 +16,7 @@ def consumer2(port1, port2):
     consumer1_rec.connect("tcp://127.0.0.1:%s" % port1)
 
     consumer1_sender = context.socket(zmq.PUSH)
-    consumer1_sender.connect("tcp://127.0.0.1:%s" % port2)
+    consumer1_sender.bind("tcp://127.0.0.1:%s" % port2)
 
 
     while True:
@@ -41,4 +41,3 @@ def consumer2(port1, port2):
         consumer1_sender.send_pyobj(msg)
         time.sleep(1)
 
-consumer2('5555', '5556')

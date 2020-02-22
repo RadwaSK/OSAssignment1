@@ -1,5 +1,6 @@
 import zmq
 import cv2
+import time
 
 
 def consumer1(port1, port2):
@@ -14,7 +15,7 @@ def consumer1(port1, port2):
     consumer1_rec.connect("tcp://127.0.0.1:%s" % port1)
 
     consumer1_sender = context.socket(zmq.PUSH)
-    consumer1_sender.connect("tcp://127.0.0.1:%s" % port2)
+    consumer1_sender.bind("tcp://127.0.0.1:%s" % port2)
 
     while True:
         msg = consumer1_rec.recv_pyobj()
@@ -23,5 +24,5 @@ def consumer1(port1, port2):
         ret, img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
         msg['data'] = img
         consumer1_sender.send_pyobj(msg)
-        # time.sleep(1)
+        time.sleep(1)
 

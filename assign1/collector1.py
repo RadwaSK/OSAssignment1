@@ -1,5 +1,6 @@
 import zmq
 import cv2
+import time
 
 
 def collector1(port1, port2):
@@ -14,11 +15,11 @@ def collector1(port1, port2):
     collector1_rec.connect("tcp://127.0.0.1:%s" % port1)
 
     collector1_sender = context.socket(zmq.PUSH)
-    collector1_sender.connect("tcp://127.0.0.1:%s" % port2)
+    collector1_sender.bind("tcp://127.0.0.1:%s" % port2)
 
     while True:
         msg = collector1_rec.recv_pyobj()
         # print(msg)
         collector1_sender.send_pyobj(msg)
-        # time.sleep(1)
+        time.sleep(1)
 
