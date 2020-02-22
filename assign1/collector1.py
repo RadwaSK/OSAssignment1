@@ -1,7 +1,7 @@
 import zmq
 import cv2
 import time
-
+import sys
 
 def collector1(port1, port2):
     """
@@ -19,7 +19,11 @@ def collector1(port1, port2):
 
     while True:
         msg = collector1_rec.recv_pyobj()
-        # print(msg)
+        print('msg received from consumer1')
         collector1_sender.send_pyobj(msg)
+        print('msg sent to consumer2')
         time.sleep(1)
 
+port1 = int(sys.argv[1])
+port2 = int(sys.argv[2])
+collector1(port1, port2)

@@ -1,6 +1,6 @@
 import zmq
 from utils import *
-
+import sys
 
 def server(port, video_name):
     """
@@ -15,15 +15,16 @@ def server(port, video_name):
 
     if not os.path.exists('images'):
         os.makedirs('images')
-        resample_video_frames(30, 5, video_name, 'images')
+        resample_video_frames(30, 1, video_name, 'images')
 
     images, names = read_images(r'images')
 
     for img, name in zip(images, names):
-        print('a')
         msg = {'data': img, 'name': name}
         socket.send_pyobj(msg)
         # msg = socket.recv()
-        print(msg)
+        print('send image to consumer1')
 
-# server(5555, 'checkerboard.mp4')
+port = int(sys.argv[1])
+video = sys.argv[2]
+server(port, video)

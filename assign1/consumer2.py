@@ -1,6 +1,7 @@
 import zmq
 import cv2
 import time
+import sys
 
 
 def consumer2(port1, port2):
@@ -21,7 +22,7 @@ def consumer2(port1, port2):
 
     while True:
         msg = consumer1_rec.recv_pyobj()
-        print(msg)
+        print('msg received from collector1')
         img = msg['data']
         name = msg['name']
         binary_img, contours, heirachy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -39,5 +40,10 @@ def consumer2(port1, port2):
             all_conts[cont_name] = coords
         msg['conts'] = all_conts
         consumer1_sender.send_pyobj(msg)
+        print('msg sent to collector3')
         time.sleep(1)
 
+
+port1 = int(sys.argv[1])
+port2 = int(sys.argv[2])
+consumer2(port1, port2)

@@ -1,7 +1,7 @@
 import zmq
 import cv2
 import time
-
+import sys
 
 def consumer1(port1, port2):
     """
@@ -19,10 +19,15 @@ def consumer1(port1, port2):
 
     while True:
         msg = consumer1_rec.recv_pyobj()
-        # print(msg)
+        print('msg received from server')
         img = msg['data']
         ret, img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
         msg['data'] = img
         consumer1_sender.send_pyobj(msg)
+        print('msg sent to collector1')
         time.sleep(1)
 
+
+port1 = int(sys.argv[1])
+port2 = int(sys.argv[2])
+consumer1(port1, port2)
