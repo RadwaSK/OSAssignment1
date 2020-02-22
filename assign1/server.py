@@ -20,7 +20,10 @@ def server(port, video_name):
     images, names = read_images(r'images')
 
     for img, name in zip(images, names):
+        print('a')
         msg = {'data': img, 'name': name}
-        # socket.send_pyobj(msg)
+        socket.send_pyobj(msg)
         # msg = socket.recv()
-        # print(msg)
+        print(msg)
+
+# server(5555, 'checkerboard.mp4')
