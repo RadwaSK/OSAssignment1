@@ -15,7 +15,7 @@ def collector1(port1, port2):
     collector1_rec.connect("tcp://127.0.0.1:%s" % port1)
 
     collector1_sender = context.socket(zmq.PUSH)
-    collector1_sender.bind("tcp://127.0.0.1:%s" % port2)
+    collector1_sender.bind("tcp://*:%s" % port2)
 
     while True:
         msg = collector1_rec.recv_pyobj()

@@ -2,6 +2,7 @@ import zmq
 import cv2
 import time
 import sys
+import numpy as np
 
 
 def consumer2(port1, port2):
@@ -14,7 +15,7 @@ def consumer2(port1, port2):
     """
     context = zmq.Context()
     consumer1_rec = context.socket(zmq.PULL)
-    consumer1_rec.connect("tcp://127.0.0.1:%s" % port1)
+    consumer1_rec.connect("tcp://192.168.43.153:%s" % port1)
 
     consumer1_sender = context.socket(zmq.PUSH)
     consumer1_sender.bind("tcp://127.0.0.1:%s" % port2)
@@ -23,10 +24,12 @@ def consumer2(port1, port2):
     while True:
         msg = consumer1_rec.recv_pyobj()
         print('msg received from collector1')
-        img = msg['data']
+        img = np.array(msg['data'], dtype=np.uint8)
+        print(img.dtype)
         name = msg['name']
+        img = cv2.Canny(img, 100, 200)
         binary_img, contours, heirachy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        msg = {'name': name}
+        new_msg = {'name': name}
         all_conts = {}
         for j, cont in enumerate(contours):
             cont_name = 'cont' + str(j)
@@ -38,8 +41,8 @@ def consumer2(port1, port2):
                 coords[x] = p[0]
                 coords[y] = p[1]
             all_conts[cont_name] = coords
-        msg['conts'] = all_conts
-        consumer1_sender.send_pyobj(msg)
+        new_msg['conts'] = all_conts
+        consumer1_sender.send_pyobj(new_msg)
         print('msg sent to collector3')
         time.sleep(1)
 

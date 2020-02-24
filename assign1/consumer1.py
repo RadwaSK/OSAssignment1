@@ -22,7 +22,7 @@ def consumer1(port1, port2):
         print('msg received from server')
         img = msg['data']
         ret, img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
-        msg['data'] = img
+        msg['data'] = img.tolist()
         consumer1_sender.send_pyobj(msg)
         print('msg sent to collector1')
         time.sleep(1)

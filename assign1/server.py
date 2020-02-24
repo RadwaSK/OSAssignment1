@@ -22,8 +22,8 @@ def server(port, video_name):
     for img, name in zip(images, names):
         msg = {'data': img, 'name': name}
         socket.send_pyobj(msg)
-        # msg = socket.recv()
         print('send image to consumer1')
+
 
 port = int(sys.argv[1])
 video = sys.argv[2]
