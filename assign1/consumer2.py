@@ -18,16 +18,14 @@ def consumer2(port1, port2):
     consumer1_rec.connect("tcp://192.168.43.153:%s" % port1)
 
     consumer1_sender = context.socket(zmq.PUSH)
-    consumer1_sender.bind("tcp://127.0.0.1:%s" % port2)
+    consumer1_sender.connect("tcp://127.0.0.1:%s" % port2)
 
 
     while True:
         msg = consumer1_rec.recv_pyobj()
         print('msg received from collector1')
         img = np.array(msg['data'], dtype=np.uint8)
-        print(img.dtype)
         name = msg['name']
-        img = cv2.Canny(img, 100, 200)
         binary_img, contours, heirachy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         new_msg = {'name': name}
         all_conts = {}

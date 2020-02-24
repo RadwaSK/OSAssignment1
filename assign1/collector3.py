@@ -11,7 +11,7 @@ def collector3(port):
     """
     context = zmq.Context()
     collector1_rec = context.socket(zmq.PULL)
-    collector1_rec.connect("tcp://127.0.0.1:%s" % port)
+    collector1_rec.bind("tcp://127.0.0.1:%s" % port)
 
     if not os.path.exists('results'):
         os.makedirs('results')
@@ -22,8 +22,8 @@ def collector3(port):
         f = open('results/' + msg['name']+".txt", "w+")
         for cont_name in msg['conts']:
             string = "This contor of " + (cont_name) +" x0 " + str(msg['conts'][cont_name]['x0']) + " y0 " + \
-                     str(msg['conts'][cont_name]['y0']) + " x1 " + str(msg['conts'][cont_name]['x1']) +" y1 " + \
-                     str(msg['conts'][cont_name]['y1']) + '\n\n'
+                     str(msg['conts'][cont_name]['y0']) + " x2 " + str(msg['conts'][cont_name]['x2']) +" y2 " + \
+                     str(msg['conts'][cont_name]['y2']) + '\n\n'
             f.write(string)
         time.sleep(1)
 
